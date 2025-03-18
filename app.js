@@ -132,7 +132,7 @@
 // };
 
 
-//CODIGO EN CONSOLA PROFE
+//CODIGO EN CONSOLA PROFESOR
 //===========================================================================================================================================================================================================================================================================================
 
 // function registrarIngresoOEgreso() {
@@ -199,7 +199,7 @@
 //===========================================================================================================================================================================================================================================================================================
 //===========================================================================================================================================================================================================================================================================================
 
-//CODIGO EN CONSOLA MIO
+//CODIGO EN CONSOLA MAURICIO
 const transacciones = [];
 
 function Movimiento(tipo, monto, descripcion) {
@@ -229,7 +229,9 @@ Movimiento.prototype.validarMovimiento = function () {
 };
 
 function registrarIngresoOEgreso() {
-  while (true) {
+  let continuar = true;
+  
+  while (continuar) {
     const descripcion = prompt("Ingrese la nueva transacción");
     const tipoDeTransaccion = prompt(
       "Escoja el tipo de transacción \n1) Ingreso\n2) Egreso\n\n Solo debe poner el número de la opción"
@@ -243,11 +245,21 @@ function registrarIngresoOEgreso() {
       console.log(validacion.message);
     } else {
       transacciones.push(movimiento);
-      // movimiento.render();
+      
+      // Mostrar el movimiento recién agregado en el formato requerido
+      console.log("Nombre del movimiento: " + movimiento.descripcion);
+      console.log("Tipo: " + (movimiento.tipo === "1" ? "Ingreso" : "Egreso"));
+      console.log("Monto: " + movimiento.monto.toFixed(2));
+      console.log("");
     }
-
-    const confirmacion = confirm("Desea agregar otra transacción?");
-    if (!confirmacion) break;
+    
+    // Mostrar la pregunta y la respuesta en el formato requerido
+    const respuesta = prompt("¿Registrar otro movimiento? (si/no):").toLowerCase();
+    console.log("¿Registrar otro movimiento? (si/no): " + respuesta);
+    
+    if (respuesta !== "si") {
+      continuar = false;
+    }
   }
 }
 
@@ -263,16 +275,15 @@ function filterTransactions() {
   console.log(filtroDeDatos);
 }
 
-function calcularTotalSaldo(){
-  
+function calcularTotalSaldo() {
   let total = 0;
 
-  transacciones.forEach((transaccion)=>{
-    if(transaccion.tipo === "1"){
-      //Ingreso
+  transacciones.forEach((transaccion) => {
+    if (transaccion.tipo === "1") {
+      // Ingreso
       total += transaccion.monto;
-    } else if (transaccion.tipo === "2"){
-      //Egreso
+    } else if (transaccion.tipo === "2") {
+      // Egreso
       total -= transaccion.monto;
     }
   });
@@ -280,34 +291,58 @@ function calcularTotalSaldo(){
 }
 
 function mostrarResumen() {
-  let totalIngresos = 0;
-  let totalGastos = 0;
+  console.log("\nResumen Final");
+  console.log("-----------------------");
 
-  // Recorremos el array transacciones para calcular los ingresos y gastos
-  transacciones.forEach((transaccion) => {
-    if (transaccion.tipo === "1") {
-      totalIngresos += transaccion.monto; // Sumar ingresos
-    } else if (transaccion.tipo === "2") {
-      totalGastos += transaccion.monto; // Sumar gastos
-    }
-  });
+  const totalMovimientos = transacciones.length;
+  const totalIngresos = transacciones
+    .filter((t) => t.tipo === "1")
+    .reduce((sum, t) => sum + t.monto, 0);
+  const totalEgresos = transacciones
+    .filter((t) => t.tipo === "2")
+    .reduce((sum, t) => sum + t.monto, 0);
+  const saldoTotal = totalIngresos - totalEgresos;
 
-  const cantidadMovimientos = transacciones.length; // Cantidad total de movimientos
+  console.log(`Total de movimientos registrados: ${totalMovimientos}`);
+  console.log(`Saldo total: $${saldoTotal.toFixed(2)}\n`);
 
-  // Mostrar en consola el resumen
-  console.log("📊 Resumen de Transacciones 📊");
-  console.log(`Cantidad de movimientos: ${cantidadMovimientos}`);
-  console.log(`Total de ingresos: $${totalIngresos.toFixed(2)}`);
-  console.log(`Total de gastos: $${totalGastos.toFixed(2)}`);
-  console.log(`Saldo final: $${(totalIngresos - totalGastos).toFixed(2)}`);
+  console.log("\nDesglose por tipo:");
+  console.log(`- Egresos: $${totalEgresos.toFixed(2)}`);
+  console.log(`- Ingresos: $${totalIngresos.toFixed(2)}`);
 }
 
-
 // Ejecutar el programa en consola
+console.log("Registro de Gastos");
+console.log("-----------------------");
 registrarIngresoOEgreso();
 mostrarResumen();
-console.log("Lista de transacciones:", transacciones);
-console.log("Saldo total:", calcularTotalSaldo());
 
 
+// Una forma de mostrar el resumen realizada primero en el main
+// function mostrarResumen() {
+//   let totalIngresos = 0;
+//   let totalGastos = 0;
 
+//   // Recorremos el array transacciones para calcular los ingresos y gastos
+//   transacciones.forEach((transaccion) => {
+//     if (transaccion.tipo === "1") {
+//       totalIngresos += transaccion.monto; // Sumar ingresos
+//     } else if (transaccion.tipo === "2") {
+//       totalGastos += transaccion.monto; // Sumar gastos
+//     }
+//   });
+
+//   const cantidadMovimientos = transacciones.length; // Cantidad total de movimientos
+
+//   // Mostrar en consola el resumen
+//   console.log("📊 Resumen de Transacciones 📊");
+//   console.log(`Cantidad de movimientos: ${cantidadMovimientos}`);
+//   console.log(`Total de ingresos: $${totalIngresos.toFixed(2)}`);
+//   console.log(`Total de gastos: $${totalGastos.toFixed(2)}`);
+//   console.log(`Saldo final: $${(totalIngresos - totalGastos).toFixed(2)}`);
+// }
+
+
+// //ESTE ES PARA DEJAR LA OPCIÓN DE AGREGAR OTRA TRANSACCIÓN CON UN BOTÓN DE "ACEPTAR", va después de transacciones.push(movimiento)
+    // const confirmacion = confirm("Desea agregar otra transacción?");
+    // if (!confirmacion) break;
